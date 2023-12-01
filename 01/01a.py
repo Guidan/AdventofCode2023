@@ -10,7 +10,6 @@ def getcalibration(string: str):
             if first_num == "":
                 first_num = char
             last_num = char
-    print(first_num + "" + last_num)
     return int(first_num + "" + last_num)
 
 
