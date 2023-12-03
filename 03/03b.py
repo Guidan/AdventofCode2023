@@ -1,33 +1,46 @@
 with open("./input.txt") as file:
     schematic = file.readlines()
 
-SPECIAL_CHARS = "!@#$%^&*()-+?_=,<>/"
-
 
 def get_sum(schem: list):
     total = 0
+    gears_list = {}
     for i, row in enumerate(schem):
         current_number = ""
-        is_needed = False
+        connected_gear = None
         for k, char in enumerate(row):
             if char.isdigit():
                 current_number = current_number + char
                 if i > 0:
-                    if any(c in SPECIAL_CHARS for c in schem[i-1][k-1:k+2]):
-                        is_needed = True
-                if any(c in SPECIAL_CHARS for c in row[k-1:k+2]):
-                    is_needed = True
-                if i < (len(schem)-1):
-                    if any(c in SPECIAL_CHARS for c in schem[i+1][k-1:k+2]):
-                        is_needed = True
+                    if schem[i-1][k-1] == "*":
+                        connected_gear = str(i-1)+str(k-1)
+                    if schem[i - 1][k] == "*":
+                        connected_gear = str(i - 1) + str(k)
+                    if schem[i - 1][k + 1] == "*":
+                        connected_gear = str(i - 1) + str(k + 1)
+                if i < len(schem)-2:
+                    if schem[i+1][k - 1] == "*":
+                        connected_gear = str(i+1) + str(k - 1)
+                    if schem[i+1][k] == "*":
+                        connected_gear = str(i+1) + str(k)
+                    if schem[i+1][k + 1] == "*":
+                        connected_gear = str(i+1) + str(k + 1)
+                if schem[i][k - 1] == "*":
+                    connected_gear = str(i) + str(k - 1)
+                if schem[i][k] == "*":
+                    connected_gear = str(i) + str(k)
+                if schem[i][k + 1] == "*":
+                    connected_gear = str(i) + str(k + 1)
             else:
-                if is_needed:
-                    total = total + int(current_number)
-                    is_needed = False
+                if current_number != "":
+                    if connected_gear:
+                        if gears_list.get(connected_gear):
+                            total = total + (int(gears_list.get(connected_gear)) * int(current_number))
+                        else:
+                            gears_list[connected_gear] = current_number
                     current_number = ""
-                else:
-                    is_needed = False
-                    current_number = ""
+                    connected_gear = None
+
     return total
 
 
