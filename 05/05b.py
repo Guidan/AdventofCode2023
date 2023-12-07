@@ -66,6 +66,7 @@ def getlowestloc(schematic: list) -> int:
                 loc = get_value(hum, hum_to_loc)
                 if lowest_loc > loc:
                     lowest_loc = loc
+                    print(lowest_loc)
     return lowest_loc
 
 
